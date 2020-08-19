@@ -6,7 +6,7 @@ window.onload=function(){
 	if(ss_count == 0){
 		// Add CSS stylesheet to <head>
 		link=document.createElement('link');
-		link.href='https://tallyco.in/css/tallypay.css?v=2.1';
+		link.href='https://tallyco.in/css/tallypay.css?v=2.1.2';
 		link.rel='stylesheet';
 		document.getElementsByTagName('head')[0].appendChild(link);
 	}
@@ -57,6 +57,7 @@ var tallypay=function(user,fundid,ex_rates_inc,is_button,button_text,clickable_i
 	function call_api(params,endpoint){
 		
 		var api_source = 'https://api.tallyco.in'+endpoint;		
+	
 		var xhr = new XMLHttpRequest();
 		
 		if(endpoint == '/v1/fundraiser/index.php' || endpoint == '/v1/user/default_fundraiser/index.php'){ xhr.onload = function() {	
@@ -64,7 +65,9 @@ var tallypay=function(user,fundid,ex_rates_inc,is_button,button_text,clickable_i
 		} }	
 	
 		if(endpoint == '/v1/payment/request/index.php'){ xhr.onload = function() {	
-			if(this.response.hasOwnProperty('error') || this.response == 'null'){ alert('ERROR: '+this.response.error); }else{ tc_pay_page( this.response ); }
+			if(this.response == null){ tc_error_page('Try again.'); }else{
+				if(this.response.hasOwnProperty('error')){ tc_error_page(this.response.error); }else{ tc_pay_page( this.response ); }
+			}
 		} }			
 		
 		if(endpoint == '/v1/payment/verify/index.php'){ xhr.onload = function() { verifyPayment( this.response ); } }	
@@ -213,6 +216,7 @@ var tallypay=function(user,fundid,ex_rates_inc,is_button,button_text,clickable_i
 		html += '					ERROR<br/>';
 		html += '					<img src="https://tallyco.in/img/tallycoin-spinner.png" style="width:100px;height:100px;"><br/>';
 		html += '					<div class="tc_error_button_text" id="tc_error_button_text-'+htmlid+'"></div>';
+		html += '					<div class="tc_flz"><a id="tc_error_back-'+htmlid+'" class="tc_link"><div class="tc_btn_txt tc_font_bold"><img src="https://tallyco.in/img/left-arrow-light.svg" style="width:10px;height:10px;">  back</div></a></div>';		
 		html += '				</div>';
 		html += '			</div>';
 		html += '		</div>	';
@@ -249,6 +253,10 @@ var tallypay=function(user,fundid,ex_rates_inc,is_button,button_text,clickable_i
 		html += '				<div id="tc_ow-'+htmlid+'"><a id="tc_open_wallet-'+htmlid+'" class="tc_wallet_btn tc_med_font tc_font_bold">Open In Wallet</a></div>';
 		html += '			</div>';
 
+		html += '			<div class="tc_wide_txt_c" id="fallback_note-'+htmlid+'">';
+		html += '				<div id="tc_fallback-'+htmlid+'" class="tc_regen_btn tc_sm_font" style="margin-top:40px;color:#bb0000;"><b>Trouble Paying?</b><br/>Regenerate QR Code</div>';
+		html += '			</div>';
+		
 		html += '			<div class="tc_profile_name tc_pay_img" id="tc_paid_button_text-'+htmlid+'">Paid<br/><img id="tc_paid_gif-'+htmlid+'" class="paid_gif" src=""></div>';		
 		html += '			<div class="tc_profile_name tc_pay_img" id="tc_no_pay_vid-'+htmlid+'">Sorry. Time\'s Up.<br/><img id="tc_no_pay_gif-'+htmlid+'" class="paid_gif" src=""></div>';
 						
@@ -275,8 +283,10 @@ var tallypay=function(user,fundid,ex_rates_inc,is_button,button_text,clickable_i
 		user = "error";
 		insertHTML();
 		hidePanels();
-		var tc_error_button_text = document.getElementById('tc_error_button_text-'+htmlid); tc_error_button_text.innerHTML=error;
+		document.getElementById('tc_front-'+htmlid).style.display = 'block';
 		document.getElementById('tc_keypad_panel-'+htmlid).style.display = 'none';
+		document.getElementById('tc_error_panel-'+htmlid).style.display = 'block';
+		document.getElementById('tc_error_button_text-'+htmlid).innerHTML = error;
 	}
 
 	function insertHTML(){		
@@ -336,13 +346,16 @@ var tallypay=function(user,fundid,ex_rates_inc,is_button,button_text,clickable_i
 		document.getElementById("tc_amount_option_item-"+htmlid).onclick = function() { tc_select_amount_type('Item'); }
 		
 		document.getElementById("tc_message-"+htmlid).onkeyup = function(){ tc_char_count(htmlid); }
-		
+		document.getElementById("tc_donate_amount_val-"+htmlid).onkeyup = function() { tc_denom(); }		
 		document.getElementById("tc_currency_list-"+htmlid).onchange = function() { tc_denom(); }
+		
 		document.getElementById("tc_pay_back-"+htmlid).onclick = function() { tc_pay_back(); }
-		document.getElementById("tc_paid_back-"+htmlid).onclick = function() { tc_donate_amount('hide'); tc_pay_back(); }		
-		document.getElementById("tc_donate_amount_val-"+htmlid).onkeyup = function() { tc_denom(); }
-		document.getElementById("tc_btc_don_btn-"+htmlid).onclick = function() { tc_get_pay_request('btc'); }
-		document.getElementById("tc_ln_don_btn-"+htmlid).onclick = function() { tc_get_pay_request('ln'); }
+		document.getElementById("tc_error_back-"+htmlid).onclick = function() { tc_pay_back(); }
+		document.getElementById("tc_paid_back-"+htmlid).onclick = function() { tc_donate_amount('hide'); tc_pay_back(); }
+		document.getElementById("tc_fallback-"+htmlid).onclick = function() { tc_fallback(); }
+
+		document.getElementById("tc_btc_don_btn-"+htmlid).onclick = function() { tc_get_pay_request('btc',''); }
+		document.getElementById("tc_ln_don_btn-"+htmlid).onclick = function() { tc_get_pay_request('ln',''); }
 		document.getElementById("tc_qr-"+htmlid).onclick = function() { tc_copyToClipboard(htmlid); }
 		if(is_button == "Y"  || clickable_image != ''){ 
 			document.getElementById("tc_tip_button-"+htmlid).onclick = function() { tc_btn_clicked(); tc_donate_amount('show'); } 
@@ -391,6 +404,11 @@ var tallypay=function(user,fundid,ex_rates_inc,is_button,button_text,clickable_i
 	function outsideClickListener(event){	
 		var amtype = document.getElementById('tc_amount_type');
         if (!amtype.contains(event.target)) { tc_amount_type_toggle(); }		
+	}
+	
+	function tc_fallback(){
+		tc_pay_back();
+		tc_get_pay_request('ln','Y');
 	}
 	
 	function tc_btn_clicked(){
@@ -449,9 +467,11 @@ var tallypay=function(user,fundid,ex_rates_inc,is_button,button_text,clickable_i
 	}
 
 	function tc_pay_back(){
+		document.getElementById('tc_error_panel-'+htmlid).style.display = 'none';
 		document.getElementById('tc_pay_page-'+htmlid).style.display = 'none';
 		document.getElementById('tc_back-'+htmlid).style.display = 'none';
 		document.getElementById('tc_front-'+htmlid).style.display = 'block';
+		document.getElementById('tc_keypad_panel-'+htmlid).style.display = 'block';
 		clearInterval(paytimer);		
 	}
 
@@ -500,7 +520,7 @@ var tallypay=function(user,fundid,ex_rates_inc,is_button,button_text,clickable_i
 		document.getElementById("tc_no_pay_vid-"+htmlid).style.display = 'none';
 	}
 	
-	function tc_get_pay_request(cur){
+	function tc_get_pay_request(cur,fallback){
 		var skip = "N";
 		var satoshi_amount = document.getElementById('tc_donate_amount_val-'+htmlid).value;
 		if(satoshi_amount == 0 || satoshi_amount == ''){ skip = "Y"; alert('Please enter an amount.'); }else{ satoshi_amount = parseFloat(satoshi_amount);	}
@@ -516,7 +536,7 @@ var tallypay=function(user,fundid,ex_rates_inc,is_button,button_text,clickable_i
 			var message = document.getElementById('tc_message-'+htmlid).value;
 			if(document.getElementById('public_chkbox-'+htmlid).checked !== true){ var l = logged_in_as; }else{ var l = ''; }
 		
-			var params = 'satoshi_amount='+satoshi_amount+'&payment_method='+cur+'&id='+fundid+'&type=fundraiser&message='+encodeURI(message)+'&logged_in_as='+l;	
+			var params = 'satoshi_amount='+satoshi_amount+'&payment_method='+cur+'&id='+fundid+'&type=fundraiser&message='+encodeURI(message)+'&fallback='+fallback+'&logged_in_as='+l;	
 			call_api(params,'/v1/payment/request/index.php'); 					
 		}
 	}
@@ -535,6 +555,8 @@ var tallypay=function(user,fundid,ex_rates_inc,is_button,button_text,clickable_i
 			document.getElementById("tc_paid_button_text-"+htmlid).style.display = 'none';
 			document.getElementById('tc_payment_id-'+htmlid).value = response.tc_payment_id;
 			document.getElementById("tc_no_pay_vid-"+htmlid).style.display = 'none';
+			
+			if(response.fallback_avail == 'Y'){ document.getElementById("fallback_note-"+htmlid).style.display = 'inherit'; }else{ document.getElementById("fallback_note-"+htmlid).style.display = 'none'; }
 			
 			if(response.message != ""){ 
 				document.getElementById("prev_message_wr-"+htmlid).style.display = 'block'; 				
@@ -564,7 +586,6 @@ var tallypay=function(user,fundid,ex_rates_inc,is_button,button_text,clickable_i
 			document.getElementById("tc_pay_timer-"+htmlid).innerHTML = '300';
 			document.getElementById("tc_exact-"+htmlid).innerHTML = exact_send;
 			paytimer = setInterval(function(){ doPayTimer(); },1000);	
-
 		}	
 	}
 
@@ -608,6 +629,12 @@ var tallypay=function(user,fundid,ex_rates_inc,is_button,button_text,clickable_i
 			payment_success_callback(success_callback, window, arr);
 			
 			setTimeout(function(){ tc_donate_amount('hide'); tc_pay_back(); },15000);
+		}
+	
+		if(typeof response.error !== 'undefined'){
+			clearInterval(paytimer); 
+			document.getElementById('tc_back-'+htmlid).style.display = 'none';
+			tc_error_page(response.error);
 		}
 	}
 
