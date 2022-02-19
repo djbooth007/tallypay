@@ -144,7 +144,7 @@ var tallypay=function(user,fundid,ex_rates_inc,is_button,button_text,clickable_i
 		html += '				</div>';
 
 		html += '				<div id="tc_preset_keypad-'+htmlid+'" class="tc_keypad_grid tc_centered">';
-		html += '					<div class="tc_keypad_cell tc_keypad_cell_'+theme+' tc_cell_br tc_cell_rtl tc_ps-'+htmlid+'" id="tc_pkeypad_50-'+htmlid+'">50<span class="tc_sym">c</span></div>';
+		html += '					<div class="tc_keypad_cell tc_keypad_cell_'+theme+' tc_cell_br tc_cell_rtl tc_ps-'+htmlid+'" id="tc_pkeypad_50-'+htmlid+'">50<span class="tc_sym">&cent;</span></div>';
 		html += '					<div class="tc_keypad_cell tc_keypad_cell_'+theme+' tc_cell_br tc_ps-'+htmlid+'" id="tc_pkeypad_100-'+htmlid+'"><span class="tc_sym">$</span>1</div>';
 		html += '					<div class="tc_keypad_cell tc_keypad_cell_'+theme+' tc_cell_b tc_cell_rtr tc_ps-'+htmlid+'" id="tc_pkeypad_200-'+htmlid+'"><span class="tc_sym">$</span>2</div>';
 		html += '					<div class="tc_keypad_cell tc_keypad_cell_'+theme+' tc_cell_br tc_ps-'+htmlid+'" id="tc_pkeypad_500-'+htmlid+'"><span class="tc_sym">$</span>5</div>';
