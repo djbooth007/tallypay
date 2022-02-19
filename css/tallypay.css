@@ -26,6 +26,8 @@
 .tc_fiat_box{ padding:5px 0 5px 5px; position:absolute; bottom:0px; display:block; width:98%;  }
 .tc_block{ display:block; }
 .tc_iblock{ display:inline-block; }
+.tc_flex { display: flex; }
+.tc_items_center { align-items: center; }
 .tc_message_avatar{ width:50px; height:50px; border-radius:50px; display:inline-block; border:3px solid white; margin-right:5px; vertical-align: top; }
 .tc_message{ display:inline-block; background:#573e92; color:white; border-radius:10px; padding:20px; font-size:1.2rem; vertical-align: top; max-width: 250px; }
 
@@ -64,8 +66,8 @@
 .tc_chkbox input:checked ~ .tc_checkmark:after {  display: block; }
 .tc_chkbox .tc_checkmark:after {  left: 9px;  top: 5px;  width: 5px;  height: 10px;  border: solid white;  border-width: 0 3px 3px 0;  -webkit-transform: rotate(45deg);  -ms-transform: rotate(45deg);  transform: rotate(45deg); }
 
-.tc_char_count{ float:right;height:30px; background:#e3e3e3; border-radius:3px; font-size:1rem; padding: 0 10px 0 10px; margin-right: 1.5%; color:black; }
-.tc_tag_me label{ float:left; margin-left: 35px; cursor:pointer; }
+.tc_char_count{ float:right;height:30px; background:#e3e3e3; border-radius:3px; font-size:1rem; padding: 0 10px 0 10px; margin-right: 1.5%; color:black; height: 30px; line-height: 30px; }
+.tc_tag_me label{ float:left; margin-left: 35px; cursor:pointer; line-height: 25px; }
 .noselect {  -webkit-touch-callout: none;     -webkit-user-select: none;  -khtml-user-select: none;  -moz-user-select: none;   -ms-user-select: none; user-select: none; }
 
 .tc_centered{ position:relative; transform: translateX(-50%); left:50%; }
@@ -86,28 +88,29 @@
 
 .tc_cell_br{ border-bottom:0; border-right:0; } .tc_cell_b{ border-bottom:0; } .tc_cell_r{ border-right:0; } 
 .tc_cell_rtl{ border-top-left-radius: 5px; } .tc_cell_rtr{ border-top-right-radius: 5px; } .tc_cell_rbl{ border-bottom-left-radius: 5px; } .tc_cell_rbr{ border-bottom-right-radius: 5px; }
-.tc_keypad_input{ background: #dcdcdc; border-radius: 5px; margin-bottom:5px;}
-.tc_keypad_input input{ outline-width: 0; border:0; display:inline-block; margin:5px 5px 5px 10px; font-size: 1.7em; background: #dcdcdc; color:black; max-width: 180px; }
+.tc_keypad_input{ background: #dcdcdc; border-radius: 5px; margin-bottom:5px; display: flex; align-items: center; }
+.tc_keypad_input input{ outline-width: 0; border:0; display:inline-block; font-size: 1.7em; background: #dcdcdc; color:black; flex: 1 1 auto; width: 1%; margin: 5px 10px; }
 .tc_input::placeholder{ color:#cccccc; }
 .tc_input::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button {  -webkit-appearance: none; margin: 0; }
 .tc_input:focus{ outline-width: 0; border: 0; }
+.tc_input_denom { font-size: 1.2em; margin: 5px 10px; user-select: none; }
 
 .tc_right_float{ float:right; margin:7px 10px 0 0; font-size: 1.2em; color:black; }
 .tc_dropdown_txt{ float: left; line-height: 50px; padding: 0 15px 0 15px; font-size: 1.2rem; }
 #tc_amount_type{ background: white; color:black; border-radius: 5px; border: 1px solid #e4e3f9; cursor:pointer; }
 #tc_amount_type_options{ display:none; position: absolute; z-index:1; background: white; }
-.tc_amount_option{ background: white; color:black; border-bottom: 1px solid black; border-left: 1px solid black; border-right: 1px solid black; cursor:pointer; text-align: left; padding: 10px 15px 10px 15px; font-size: 1.2rem;}
+.tc_amount_option{ background: white; color:black; border-bottom: 1px solid black; border-left: 1px solid black; border-right: 1px solid black; cursor:pointer; text-align: left; padding: 10px 15px 10px 15px; font-size: 1.2rem; display: flex; align-items: center; }
 .tc_amount_option:hover{ background: #f5f5f5; }
-.tc_amount_option img{ position:relative; top:5px; margin-right:5px; }
+.tc_amount_option img{ margin-right:5px; }
 .tc_sym{ position: relative;top: -1px;font-size: 70%;padding-right: 3px; font-family: sans-serif; }
 
-.tc_donate_denom{ display:inline-block; font-size:100%; float:left; }
-.tc_fiat_amount{ margin-top:3px; font-weight:400; float:right; }
+.tc_donate_denom{ display:inline-block; font-size:100%; }
+.tc_fiat_amount{ margin-top:3px; font-weight:400; margin-left: auto; }
 .tc_don_btn_wr{ width:48%;display:inline-block; }
 .tc_btn { font-size: 1.2em; text-align:center; border-radius:3px; padding: 10px 15px 10px 15px; cursor:pointer; margin-bottom:6px; display: block; font-weight: 400; white-space: nowrap;  vertical-align: middle;  -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none;  }
-.tc_donate_btn { color: #fff;  background-color: #573e92;  border-color: #573e92; }
+.tc_donate_btn { color: #fff;  background-color: #573e92;  border-color: #573e92; display: flex; align-items: center; justify-content: center; }
 .tc_donate_btn:hover {  -webkit-animation-name: pulse;  animation-name: pulse;  -webkit-animation-duration: 0.35s;  animation-duration: 0.35s;  -webkit-animation-fill-mode: both;  animation-fill-mode: both;}
-.tc_donate_btn img{ width:30px; height:30px; margin-right:0.5em; position:relative; top:5px; }
+.tc_donate_btn img{ width:30px; height:30px; margin-right:0.5em; }
 .tc_donate_btn span{ height:30px; line-height:30px; }
 .tc_pay_method_boxes{ display:block;margin-top:10px;text-align:left; }
 

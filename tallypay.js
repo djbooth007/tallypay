@@ -137,11 +137,10 @@ var tallypay=function(user,fundid,ex_rates_inc,is_button,button_text,clickable_i
 		html += '				</div>';
 
 		html += '				<div class="tc_keypad_wrapper">';					
-		html += '					<div class="tc_keypad_input tc_centered">';
-		html += '					<div style="float:left"><input class="tc_input" id="tc_donate_amount_val-'+htmlid+'" placeholder="0"></div>';
-		html += '					<div class="tc_right_float">satoshis</div>';
-		html += '					<div style="clear:both"></div>';
-		html += '				</div>';
+		html += '					<div class="tc_keypad_input">';
+		html += '						<input class="tc_input" id="tc_donate_amount_val-'+htmlid+'" placeholder="0">';
+		html += '						<div class="tc_input_denom">satoshis</div>';
+		html += '					</div>';
 
 		html += '				<div id="tc_preset_keypad-'+htmlid+'" class="tc_keypad_grid tc_centered">';
 		html += '					<div class="tc_keypad_cell tc_keypad_cell_'+theme+' tc_cell_br tc_cell_rtl tc_ps-'+htmlid+'" id="tc_pkeypad_50-'+htmlid+'">50<span class="tc_sym">c</span></div>';
@@ -180,10 +179,9 @@ var tallypay=function(user,fundid,ex_rates_inc,is_button,button_text,clickable_i
 		html += '					<div class="tc_keypad_cell tc_keypad_cell_'+theme+' tc_cell_rbr tc_kp-'+htmlid+'" id="tc_keypad_back-'+htmlid+'"><img src="https://tallyco.in/img/backspace.svg" style="width:30px; height:30px; margin-top:0.3em"></div>';
 		html += '				</div>';
 			
-		html += '				<div class="tc_block">';
+		html += '				<div class="tc_flex tc_items_center">';
 		html += '					<div class="tc_donate_denom"><select id="tc_currency_list-'+htmlid+'" class="tc_select_light"></select></div>';
 		html += '					<div class="tc_fiat_amount"><span id="tc_fiat_value-'+htmlid+'"></span></div>';
-		html += '					<div style="clear:both"></div>';
 		html += '				</div>';
 		
 		var la = '';
