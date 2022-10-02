@@ -1,3 +1,11 @@
+# DEPRECATED
+
+NOTE: This version of Tallypay is now deprecated. This (old) version uses our old API, so results may be inaccurate or not return any useful data and may stop functioning in future.
+
+The new version is available at https://tallycoin.app/plugin/
+
+We will still keep old legacy code available here.
+
 # Tallycoin Bitcoin Fundraising
 
 Tallycoin (at https://tallyco.in/) is a non-custodial Bitcoin fundraising platform.
